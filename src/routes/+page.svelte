@@ -1,2 +1,21 @@
-<h1 class="text-3xl font-bold underline">Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script>
+  import { queryStore, gql, getContextClient } from '@urql/svelte';
+
+  const testField = queryStore({
+    client: getContextClient(),
+    query: gql`
+      query {
+        testField
+      }
+    `,
+  });
+</script>
+
+{#if $testField.fetching}
+  <p>Loading...</p>
+{:else if $testField.error}
+  <p>Oh no... {$testField.error.message}</p>
+{:else}
+  <p>{$testField.data.testField}</p>
+{/if}
+
